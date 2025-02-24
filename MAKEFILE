@@ -1,0 +1,20 @@
+CC = g++
+CFLAGS = -Wall -g -std=c++11
+
+main: Main.o Bank.o Account.o Customer.o
+	$(CC) $(CFLAGS) -o main Main.o Bank.o Account.o Customer.o
+
+Main.o: Main.cpp
+	$(CC) $(CFLAGS) -c Main.cpp
+
+Bank.o: Bank/Bank.cpp Bank/Bank.h Bank/TransactionException.h
+	$(CC) $(CFLAGS) -c Bank/Bank.cpp
+
+Account.o: Accounts/Account.cpp Accounts/Account.h Transactions/Transaction.h
+	$(CC) $(CFLAGS) -c Accounts/Account.cpp
+
+Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction.h
+	$(CC) $(CFLAGS) -c Customers/Customer.cpp
+
+clean:
+	rm -f main *.o
