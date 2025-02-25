@@ -61,24 +61,14 @@ This project is designed to cover all major C++ concepts taught in LearnCpp:
 - g++ or MSVC compiler
 
 ### **Building the Project**
-```sh
-mkdir build
-cd build
-cmake ..
 make
-```
-Or for Windows:
-```sh
-mkdir build
-cd build
-cmake ..
-cmake --build .
 ```
 
 ## Running the Simulation
 After building the project, run:
 ```sh
 ./BankSimulation
+./main.exe
 ```
 
 ## Future Improvements
@@ -87,8 +77,5 @@ After building the project, run:
 - Add more complex financial instruments.
 
 ## Contributors
-- [Your Name]
-
-## License
-MIT License
+- Samir Farhat(SamirFarhat17)
 
