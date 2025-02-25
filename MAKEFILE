@@ -1,6 +1,9 @@
 CC = g++
 CFLAGS = -Wall -g -std=c++11
 
+$(EXEC): Main.o Bank.o Account.o Customer.o
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
+
 main: Main.o Bank.o Account.o Customer.o
 	$(CC) $(CFLAGS) -o main Main.o Bank.o Account.o Customer.o
 
@@ -17,4 +20,4 @@ Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction
 	$(CC) $(CFLAGS) -c Customers/Customer.cpp
 
 clean:
-	rm -f main *.o
+	del /Q $(EXEC) *.o *.exe

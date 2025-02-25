@@ -11,25 +11,18 @@
 
 class Bank {
 private:
-    std::vector<Customer*> customers;
-    std::unordered_map<int, Account*> mappings;
+    std::vector<Customer> customers;
+    std::unordered_map<int, Account> mappings;
 
 public:
     Bank() {}
 
-    ~Bank() {
-        for (auto c : customers) 
-            delete c;
-        for (auto it = mappings.begin(); it != mappings.end(); ++it) 
-            delete it->second;
-    }
-
-    void addCustomer(Customer* c) {
+    void addCustomer(Customer c) {
         customers.push_back(c);
     }
 
-    void addAccount(Account* a) {
-        mappings[a->getId()] = a;
+    void addAccount(Account a) {
+        mappings[a.getId()] = a;
     }
 
     void executeTransaction(Transaction transact);

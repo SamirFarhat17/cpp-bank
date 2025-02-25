@@ -3,14 +3,17 @@
 int Account::_next_id = 1000;
 
 double Account::getBalance() {
-return balance;
+    return balance;
 }
+
 std::vector<Transaction> Account::getTransactions() {
-return transactions;
+    return transactions;
 }
+
 void Account::withdraw(double amnt) {
-balance = amnt;
+    balance -= amnt; // Corrected to subtract the amount from balance
 }
-void Account::deposit (double amnt)
-balance += amnt;
+
+void Account::deposit(double amnt) {
+    balance += amnt;
 }

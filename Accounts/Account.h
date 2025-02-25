@@ -12,6 +12,7 @@ private:
     std::vector<Transaction> transactions;
 
 public:
+    Account() : accId(++_next_id) {}
     Account(double deposit) : balance(deposit), accId(++_next_id) {}
 
     int getId() { return accId; }

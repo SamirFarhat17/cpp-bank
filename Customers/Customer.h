@@ -18,6 +18,7 @@ protected:
 
 public:
     Customer(std::string n);
+    std::string getName() { return name; }
     int generateCustomerID();
     void openAccount(double deposit);
     int getId() { return _id; }
