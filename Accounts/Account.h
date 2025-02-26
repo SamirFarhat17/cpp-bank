@@ -10,7 +10,7 @@ private:
     static int _next_id;
     int accId;
     double balance = 0;
-    std::vector<Transaction> transactions;
+    std::vector<Transaction*> transactions;
 protected:
     void deposit(double amnt);
     void withdraw(double amnt);
@@ -18,10 +18,13 @@ protected:
 public:
     Account(); 
     Account(double deposit);
+    Account(const Account& other); // copy constructor
+    Account operator=(const Account& other); // assignment constructor
+    ~Account(); //destructor
 
     int getId();
     double getBalance();
-    std::vector<Transaction> getTransactions();
+    std::vector<Transaction*> getTransactions();
     
 };
 

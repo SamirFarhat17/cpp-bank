@@ -9,8 +9,12 @@ double globalInterestRate = 200.0000;
 
 Bank::Bank() {}
 Bank::~Bank() {
-    for(Customer* c : customers) delete c;
-    for(auto it = mappings.begin(); it != mappings.end(); ++it) delete it->second;
+    std::cout << "Deleting each customer in customers from Bank.cpp\n";
+    //for(Customer* c : customers) delete c; 
+    customers.clear();
+    std::cout << "Deleting each Account in mappings from Bank.cpp\n";
+    //for(auto it = mappings.begin(); it != mappings.end(); ++it) delete it->second;
+    mappings.clear();
 }
 
 void Bank::addCustomer(Customer& c) {
@@ -18,8 +22,8 @@ void Bank::addCustomer(Customer& c) {
 }
 
 
-void Bank::addAccount(Account& a) {
-    mappings[a.getId()] = &a;
+void Bank::addAccount(Account& account) {
+    mappings[account.getId()] = &account;  // Use the actual account reference
 }
 
 Account* Bank::getCustomerAccount(int customerId, int accountId) { // TODO inbclude exception logic and customer verification
