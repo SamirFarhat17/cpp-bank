@@ -9,6 +9,10 @@
 #include "../Transactions/Transaction.h"
 #include "TransactionException.h"
 
+#define FED_INTEREST_RATE 435.000
+
+extern double globalInterestRate;
+
 class Bank {
 private:
     std::vector<Customer> customers;
