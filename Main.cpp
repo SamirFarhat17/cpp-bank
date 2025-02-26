@@ -13,6 +13,8 @@
 #define NUM_CUSTOMERS 500  // Change this value to scale
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
 
+//#define NDEBUG
+
 bool test(); // forward declaration
 
 int main() {
