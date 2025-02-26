@@ -13,7 +13,7 @@ private:
 
 public:
     Account() : accId(++_next_id) {}
-    Account(double deposit) : balance(deposit), accId(++_next_id) {}
+    Account(double deposit) : accId(++_next_id), balance(deposit) {}
 
     int getId() { return accId; }
     double getBalance();

@@ -1,10 +1,11 @@
 CC = g++
 CFLAGS = -Wall -g -std=c++11
-
-$(EXEC): Main.o Bank.o Account.o Customer.o
+EXEC = BankService.exe
+OBJS = Main.o Bank.o Account.o Customer.o
+$(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
-main: Main.o Bank.o Account.o Customer.o
+BankService: Main.o Bank.o Account.o Customer.o
 	$(CC) $(CFLAGS) -o main Main.o Bank.o Account.o Customer.o
 
 Main.o: Main.cpp

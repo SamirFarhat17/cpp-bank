@@ -9,12 +9,17 @@
 #include "Transactions/Transaction.h"
 #include "Bank/TransactionException.h"
 
-#define NUM_CUSTOMERS 5000  // Change this value to scale
-#define NUM_TRANSACTIONS 100000 // Increase for more transactions
+#define NUM_CUSTOMERS 500  // Change this value to scale
+#define NUM_TRANSACTIONS 10000 // Increase for more transactions
 
 int main() {
+    #ifdef FED_INTEREST_RATE
+        std::cout << "Fed interest rate is " << FED_INTEREST_RATE / 100 << "%" << '\n';
+        std::cout << "Global interest rate is " << globalInterestRate/100 << "%" << '\n';
+    #endif
     srand(time(nullptr));  // Random seed
-    auto start = std::chrono::high_resolution_clock::now();
+    using Clock = std::chrono::high_resolution_clock;
+    auto start = Clock::now();
     Bank masterBank;
 
     // Create customers with random accounts
@@ -57,14 +62,14 @@ int main() {
 
         Transaction txn = {amount, sender.getAccounts()[senderAccIdx].getId(), receiver.getAccounts()[receiverAccIdx].getId()};
         std::cout << "[TRANSACTION] $" << amount << " wire from " 
-                      << sender.getName() << " (Acc: " << sender.getAccounts()[senderAccIdx].getId() << "," << sender.getAccounts()[senderAccIdx].getBalance()
+                      << sender.getName() << '[' << sender.getId() << ']' << " (Acc: " << sender.getAccounts()[senderAccIdx].getId() << "," << sender.getAccounts()[senderAccIdx].getBalance()
                       << ") to " << receiver.getName() << " (Acc: " << receiver.getAccounts()[receiverAccIdx].getId() << ")"
                       << std::endl;
 
         masterBank.executeTransaction(txn);
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
+    auto end = Clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Elapsed time: " << elapsed.count() * 1000 << " milliseconds" << std::endl;
 

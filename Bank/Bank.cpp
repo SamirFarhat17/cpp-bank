@@ -1,6 +1,8 @@
 #include "Bank.h"
 #include "TransactionException.h"
 
+double globalInterestRate = 200.0000;
+
 void Bank::executeTransaction(Transaction transact) {
     try {
         if (transact.amount <= 0) 
