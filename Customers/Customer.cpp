@@ -1,7 +1,23 @@
 #include "Customer.h"
 #include <random>
+#include "../Accounts/Account.h"
+
 
 std::unordered_set<int> Customer::customerIDs;
+
+Customer::Customer(std::string n) : name(n) {
+    _id = generateCustomerID();
+    customerIDs.insert(_id);
+}
+
+std::string Customer::getName() { 
+    return name; 
+}
+int Customer::getId() { 
+    return _id; 
+}
+
+std::vector<Account> Customer::getAccounts() { return accounts; }
 
 int Customer::generateCustomerID() {
     std::random_device rd;
@@ -14,11 +30,6 @@ int Customer::generateCustomerID() {
     }
     
     return rand;
-}
-
-Customer::Customer(std::string n) : name(n) {
-    _id = generateCustomerID();
-    customerIDs.insert(_id);
 }
 
 void Customer::openAccount(double deposit) {

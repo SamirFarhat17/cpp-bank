@@ -1,23 +1,45 @@
 #include "Bank.h"
 #include "TransactionException.h"
+#include "../Customers/Customer.h"  // Include full definition of Customer
+#include "../Accounts/Account.h"    // Include full definition of Account
+#include "../Transactions/Transaction.h"  // Include full definition of Transaction
+
 
 double globalInterestRate = 200.0000;
 
+Bank::Bank() {}
+Bank::~Bank() {
+    for(Customer* c : customers) delete c;
+    for(auto it = mappings.begin(); it != mappings.end(); ++it) delete it->second;
+}
+
+void Bank::addCustomer(Customer& c) {
+    customers.push_back(&c);
+}
+
+
+void Bank::addAccount(Account& a) {
+    mappings[a.getId()] = &a;
+}
+
+Account* Bank::getCustomerAccount(int customerId, int accountId) { // TODO inbclude exception logic and customer verification
+    return mappings[accountId];
+}
+
 void Bank::executeTransaction(Transaction transact) {
     try {
-        if (transact.amount <= 0) 
-            throw TransactionException("Invalid amount submitted");
+        if (transact.amount <= 0)  throw TransactionException("Invalid amount submitted");
 
         auto sourceIt = mappings.find(transact.source);
         auto destIt = mappings.find(transact.destination);
 
         if (sourceIt == mappings.end() || destIt == mappings.end())  throw TransactionException("One or more of Accounts not found");
 
-        if (transact.amount > sourceIt->second.getBalance())  throw TransactionException("Payment greater than account balance");
+        if (transact.amount > sourceIt->second->getBalance())  throw TransactionException("Payment greater than account balance");
 
         // Perform the transaction
-        sourceIt->second.withdraw(transact.amount);
-        destIt->second.deposit(transact.amount);
+        sourceIt->second->withdraw(transact.amount);
+        destIt->second->deposit(transact.amount);
     } 
     catch (TransactionException& e) {
         std::cerr << e.what() << "^^^^^" << '\n';

@@ -5,24 +5,24 @@
 #include <vector>
 #include <unordered_set>
 #include <random>
-#include "../Accounts/Account.h"
+
+class Account;
 
 class Customer {
 private:
     int _id;
     const std::string name;
     std::vector<Account> accounts;
-    
+    int generateCustomerID();
 protected:
     static std::unordered_set<int> customerIDs;
-
 public:
-    Customer(std::string n);
-    std::string getName() { return name; }
-    int generateCustomerID();
+    Customer(std::string n);    
+
+    std::string getName();
     void openAccount(double deposit);
-    int getId() { return _id; }
-    std::vector<Account> getAccounts() const { return accounts; }
+    int getId();
+    std::vector<Account> getAccounts();
 };
 
 #endif

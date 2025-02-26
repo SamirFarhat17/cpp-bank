@@ -3,16 +3,23 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <cassert>
 #include "Bank/Bank.h"
 #include "Customers/Customer.h"
 #include "Accounts/Account.h"
 #include "Transactions/Transaction.h"
 #include "Bank/TransactionException.h"
 
+//#define NDEBUG false;
+
 #define NUM_CUSTOMERS 500  // Change this value to scale
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
 
+bool test(); // forward declaration
+
 int main() {
+    if(!test()) return 0;
+
     #ifdef FED_INTEREST_RATE
         std::cout << "Fed interest rate is " << FED_INTEREST_RATE / 100 << "%" << '\n';
         std::cout << "Global interest rate is " << globalInterestRate/100 << "%" << '\n';
@@ -77,5 +84,61 @@ int main() {
 }
 
 bool test() {
+#ifdef NDEBUG
+    std::cerr << "NDEBUG is enabled";
+    std::abort();
+#endif
+
+    std::cout << "[TEST] Running Bank Application Unit Tests...\n";
+
+    // Create a test customer and account
+    Customer testCustomer("Test User");
+    testCustomer.openAccount(1000.0); // Initial deposit
+    assert(testCustomer.getAccounts().size() == 1 && "Account creation failed!");
+
+    Account& testAccount = testCustomer.getAccounts()[0];
+    double initialBalance = testAccount.getBalance();
+    
+    // Create another customer for transaction testing
+    Customer receiver("Receiver User");
+    receiver.openAccount(500.0);
+    Account& receiverAccount = receiver.getAccounts()[0];
+    double receiverInitialBalance = receiverAccount.getBalance();
+
+    Bank testBank;
+    testBank.addCustomer(testCustomer);
+    testBank.addCustomer(receiver);
+    testBank.addAccount(testAccount);
+    testBank.addAccount(receiverAccount);
+
+    // Perform a valid transaction
+    double transferAmount = 200.0;
+    Transaction validTransaction{transferAmount, testAccount.getId(), receiverAccount.getId()};
+    testBank.executeTransaction(validTransaction);
+    std::printf("%.2f %.2f %.2f\n", initialBalance, transferAmount, testAccount.getBalance());
+    assert(testBank.getCustomerAccount(testCustomer.getId(), testAccount.getId())->getBalance() == initialBalance - transferAmount && "Withdraw failed via transaction!");
+    assert(receiverAccount.getBalance() == receiverInitialBalance + transferAmount && "Deposit failed via transaction!");
+
+    // Attempt an invalid transaction (overdraft)
+    double invalidAmount = 5000.0; // More than the sender has
+    Transaction invalidTransaction{invalidAmount, testAccount.getId(), receiverAccount.getId()};
+
+    try {
+        testBank.executeTransaction(invalidTransaction);
+        assert(false && "Overdraft transaction should have thrown an exception!");
+    } catch (const TransactionException& e) {
+        std::cout << "Caught expected TransactionException: " << e.what() << std::endl;
+    }
+
+    // 6️⃣ **Check Interest Rates**
+    #ifdef FED_INTEREST_RATE
+        assert(FED_INTEREST_RATE > 0 && "FED_INTEREST_RATE is invalid!");
+        std::cout << "[SUCCESS] Fed interest rate check passed: " << FED_INTEREST_RATE / 100 << "%\n";
+    #endif
+
+    assert(globalInterestRate > 0 && "Global interest rate is invalid!");
+    std::cout << "[SUCCESS] Global interest rate check passed: " << globalInterestRate / 100 << "%\n";
+
+    std::cout << "[TEST] All tests passed successfully!\n";
     return true;
 }

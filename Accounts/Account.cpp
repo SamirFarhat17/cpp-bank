@@ -2,9 +2,14 @@
 
 int Account::_next_id = 1000;
 
+Account::Account() : accId(++_next_id) {}
+Account::Account(double deposit) : accId(++_next_id), balance(deposit) {}
+
 double Account::getBalance() {
     return balance;
 }
+
+int Account::getId() { return accId; }
 
 std::vector<Transaction> Account::getTransactions() {
     return transactions;

@@ -3,23 +3,26 @@
 
 #include <vector>
 #include "../Transactions/Transaction.h"
-
+#include "../Bank/Bank.h"
+ 
 class Account {
 private:
     static int _next_id;
     int accId;
     double balance = 0;
     std::vector<Transaction> transactions;
-
-public:
-    Account() : accId(++_next_id) {}
-    Account(double deposit) : accId(++_next_id), balance(deposit) {}
-
-    int getId() { return accId; }
-    double getBalance();
-    std::vector<Transaction> getTransactions();
+protected:
     void deposit(double amnt);
     void withdraw(double amnt);
+    friend class Bank;
+public:
+    Account(); 
+    Account(double deposit);
+
+    int getId();
+    double getBalance();
+    std::vector<Transaction> getTransactions();
+    
 };
 
 #endif
