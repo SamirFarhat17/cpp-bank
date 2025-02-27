@@ -4,10 +4,20 @@ int Account::_next_id = 1000;
 
 Account::Account() : accId(++_next_id) {}
 Account::Account(double deposit) : accId(++_next_id), balance(deposit) {}
-Account::Account(const Account& other) {
 
+Account::Account(const Account& other) {
+    std::cout<<"Account copy constructor ";
+    if(!transactions.empty()) {
+        for(Transaction* transact : transactions) delete transact;
+        transactions.clear();
+    }
+    for(Transaction* transact : other.transactions) transactions.push_back(transact);
+    accId = other.accId;
+    balance = other.balance;
 }
+
 Account Account::operator=(const Account& other) {
+    std::cout<<"Account assignment constructor ";
     if(this != &other) {
         for(Transaction* transact : transactions) delete transact;
         transactions.clear();
@@ -24,7 +34,7 @@ Account Account::operator=(const Account& other) {
 }
 
 Account::~Account() {
-    std::cout<<"Account destructor";
+    std::cout<<"Account destructor ";
     for(Transaction* transact : transactions) delete transact;
     transactions.clear();
 }

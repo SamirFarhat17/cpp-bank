@@ -5,8 +5,8 @@ OBJS = Main.o Bank.o Account.o Customer.o
 $(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
-BankService: Main.o Bank.o Account.o Customer.o
-	$(CC) $(CFLAGS) -o main Main.o Bank.o Account.o Customer.o
+BankService: Main.o Bank.o Account.o Customer.o 
+	$(CC) $(CFLAGS) -o main Main.o Bank.o Account.o Customer.o 
 
 Main.o: Main.cpp
 	$(CC) $(CFLAGS) -c Main.cpp
@@ -19,6 +19,7 @@ Account.o: Accounts/Account.cpp Accounts/Account.h Transactions/Transaction.h
 
 Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction.h
 	$(CC) $(CFLAGS) -c Customers/Customer.cpp
+
 
 clean:
 	del /Q $(EXEC) *.o *.exe

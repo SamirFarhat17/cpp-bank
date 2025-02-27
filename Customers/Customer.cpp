@@ -11,12 +11,14 @@ Customer::Customer(std::string n) : name(n) {
 }
 
 Customer::Customer(const Customer& other) : _id(other._id), name(other.name) {
+    std::cout<<"Customer Copy constructor ";
     for (Account* acc : other.accounts) {
         accounts.push_back(new Account(*acc));  // Deep copy
     }
 }
 
 Customer& Customer::operator=(const Customer& other) {
+    std::cout<<"Customer Assignment operator ";
     if(this != &other) {
         for(Account* acc : accounts) delete acc;
         accounts.clear();
@@ -35,7 +37,7 @@ Customer& Customer::operator=(const Customer& other) {
 
 
 Customer::~Customer() {
-    std::cout<<"Customer destructor";
+    std::cout<<"Customer destructor ";
     for(Account* acc : accounts) delete acc;
     accounts.clear();
 }

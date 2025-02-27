@@ -9,6 +9,7 @@
 #include "Accounts/Account.h"
 #include "Transactions/Transaction.h"
 #include "Bank/TransactionException.h"
+#include "Utilities/utilities.cpp"
 
 #define NUM_CUSTOMERS 500  // Change this value to scale
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
@@ -16,8 +17,14 @@
 //#define NDEBUG
 
 bool test(); // forward declaration
+bool testOverload();
 
 int main() {
+    if(!testOverload()) {
+        std::cerr << "Test failed, exiting.\n";
+        return 0;
+    }
+
     if (!test()) {
         std::cerr << "Test failed, exiting.\n";
         return 0;
@@ -160,4 +167,51 @@ bool test() {
     return true;
 }
 
+bool testOverload() {
+    std::cout << "[TEST] Running Overload Tests...\n";
+
+    // Create customers
+    Customer* customer1 = new Customer("Alice");
+    Customer* customer2 = new Customer("Bob");
+
+    // Open accounts with initial deposits
+    customer1->openAccount(1000.0);
+    customer1->openAccount(500.0);
+    customer2->openAccount(1200.0);
+
+    // Retrieve accounts
+    Account* acc1 = customer1->getAccounts()[0];
+    Account* acc2 = customer1->getAccounts()[1];
+    Account* acc3 = customer2->getAccounts()[0];
+
+    // Create transactions
+    Transaction t1{250.0, acc1->getId(), acc2->getId()};
+    Transaction t2{400.0, acc2->getId(), acc3->getId()};
+
+    // Test Account + Account
+    assert(add(*acc1, *acc2) == (acc1->getBalance() + acc2->getBalance()));
+
+    // Test Transaction + Transaction
+    assert(add(t1, t2) == (t1.amount + t2.amount));
+
+    // Test Customer + Customer
+    double totalBalance1 = 0;
+    double totalBalance2 = 0;
+    for (Account* a : customer1->getAccounts()) totalBalance1 += a->getBalance();
+    for (Account* a : customer2->getAccounts()) totalBalance2 += a->getBalance();
+    assert(add(*customer1, *customer2) == totalBalance1 + totalBalance2);
+
+    // Test Customer + Account
+    assert(add(*customer1, *acc3) == (totalBalance1 + acc3->getBalance()));
+
+    // Test Account + Transaction
+    assert(add(*acc1, t1) == (acc1->getBalance() + t1.amount));
+  
+    // Test three-parameter add function
+    assert(add(*customer1, *acc2, t1) == (totalBalance1 + (2*acc2->getBalance()) + t1.amount));
+
+    std::cout << "[SUCCESS] All Overload Tests Passed!\n";
+
+    return true;
+}
 
