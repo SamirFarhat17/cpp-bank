@@ -18,8 +18,14 @@
 
 bool test(); // forward declaration
 bool testOverload();
+bool testOperatorOverload();
 
 int main() {
+    if(!testOperatorOverload()) {
+        std::cerr << "Test failed, exiting.\n";
+        return 0;
+    }
+
     if(!testOverload()) {
         std::cerr << "Test failed, exiting.\n";
         return 0;
@@ -215,3 +221,39 @@ bool testOverload() {
     return true;
 }
 
+bool testOperatorOverload() {
+    std::cout << "[TEST] Running Operator Overload Tests...\n";
+
+    // Create test accounts
+    Account acc1(1000.0);  // Account with a balance of 1000
+    Account acc2(500.0);   // Account with a balance of 500
+    Account acc3(300.0);   // Account with a balance of 300
+
+    // Test Account + Account
+    Account result1 = acc1 + acc2;
+    assert(result1.getBalance() == (acc1.getBalance() + acc2.getBalance()) && "Account + Account overload failed!");
+
+    // Test Account + double
+    Account result2 = acc1 + 200.0;  // Adding 200 to acc1
+    assert(result2.getBalance() == (acc1.getBalance() + 200.0) && "Account + double overload failed!");
+
+    // Test double + Account
+    Account result3 = 150.0 + acc1;  // Adding 150 to acc1
+    assert(result3.getBalance() == (150.0 + acc1.getBalance()) && "double + Account overload failed!");
+
+    // Test Account - Account
+    Account result4 = acc1 - acc2;  // Subtracting acc2 balance from acc1 balance
+    assert(result4.getBalance() == std::min(0.0, acc1.getBalance() - acc2.getBalance()) && "Account - Account overload failed!");
+
+    Customer cust("Steve Martin");
+    std::cout << cust;
+
+    // Test Account > Account (operator >)
+    assert(acc1 > acc2 && "Account 1 should be greater than Account 2!");
+    assert(!(acc2 > acc1) && "Account 2 should not be greater than Account 1!");
+    assert(!(acc3 > acc2) && "Account 3 should not be greater than Account 2!");
+    assert(acc1 > acc3 && "Account 1 should be greater than Account 3!");
+
+    std::cout << "[SUCCESS] All Operator Overload Tests Passed!\n";
+    return true;
+}
