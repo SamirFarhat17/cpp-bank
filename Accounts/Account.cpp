@@ -1,4 +1,5 @@
 #include "Account.h"
+#include <algorithm>
 
 int Account::_next_id = 1000;
 
@@ -11,7 +12,7 @@ Account::Account(const Account& other) {
         for(Transaction* transact : transactions) delete transact;
         transactions.clear();
     }
-    for(Transaction* transact : other.transactions) transactions.push_back(transact);
+    for(Transaction* transact : other.transactions) transactions.push_back(new Transaction(*transact));
     accId = other.accId;
     balance = other.balance;
 }
@@ -26,7 +27,7 @@ Account Account::operator=(const Account& other) {
         balance = other.balance;
 
         for(Transaction* transact : other.transactions) {
-            transactions.push_back(transact);
+            transactions.push_back(new Transaction(*transact));
         }
     }
 
@@ -40,7 +41,7 @@ Account::~Account() {
 }
 
 
-double Account::getBalance() {
+double Account::getBalance() const {
     return balance;
 }
 
@@ -56,4 +57,25 @@ void Account::withdraw(double amnt) {
 
 void Account::deposit(double amnt) {
     balance += amnt;
+}
+
+
+Account Account::operator+(const Account& other) {
+    return Account(balance + other.balance);
+}
+
+Account operator+(const Account& acc, const double amnt) {
+    return Account(acc.balance + amnt);
+}
+
+Account operator+(const double amnt, const Account& acc) {
+    return Account(acc.balance + amnt);
+}
+
+Account Account::operator-(const Account& other) {
+    return Account(std::min((double)0, balance - other.balance));
+}
+
+bool operator>(const Account& a1, const Account& a2)  {
+    return a1.getBalance() > a2.getBalance();
 }

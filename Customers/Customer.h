@@ -1,6 +1,7 @@
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <unordered_set>
@@ -25,6 +26,8 @@ public:
     void openAccount(double deposit);
     int getId();
     std::vector<Account*> getAccounts();
+
+    friend std::ostream& operator<<(std::ostream& os, const Customer& c);
 };
 
 #endif

@@ -23,8 +23,15 @@ public:
     ~Account(); //destructor
 
     int getId();
-    double getBalance();
+    double getBalance() const;
     std::vector<Transaction*> getTransactions();
+
+    Account operator+(const Account& other);
+    Account operator-(const Account& other);
+
+    friend Account operator+(const Account& acc, const double amnt);
+    friend Account operator+(const double amnt, const Account& acc);
+    friend bool operator>(const Account& a1, const Account& a2);
     
 };
 
