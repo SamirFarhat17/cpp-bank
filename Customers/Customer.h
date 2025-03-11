@@ -22,8 +22,10 @@ public:
     Customer(const Customer& c);
     Customer& operator=(const Customer& other);
     ~Customer();
+
     std::string getName();
     void openAccount(double deposit);
+    void openAccount(Account acc);
     int getId();
     std::vector<Account*> getAccounts();
 

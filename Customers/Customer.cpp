@@ -69,6 +69,9 @@ void Customer::openAccount(double deposit) {
     accounts.push_back(new Account(deposit));
 }
 
+void Customer::openAccount(Account acc) {
+    accounts.push_back(new Account(acc));
+}
 
 std::ostream& operator<<(std::ostream& os, const Customer& c) {
     os << "id: " << c._id << " name: " << c.name << " accounts " << c.accounts.size() << '\n';

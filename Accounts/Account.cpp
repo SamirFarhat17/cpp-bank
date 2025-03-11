@@ -3,8 +3,8 @@
 
 int Account::_next_id = 1000;
 
-Account::Account() : accId(++_next_id) {}
-Account::Account(double deposit) : accId(++_next_id), balance(deposit) {}
+Account::Account() : accId(++_next_id) { std::cout << "-Constructed Account-"; }
+Account::Account(double deposit) : accId(++_next_id), balance(deposit) { std::cout << "-Constructed Account-"; }
 
 Account::Account(const Account& other) {
     std::cout<<"Account copy constructor ";
@@ -45,7 +45,7 @@ double Account::getBalance() const {
     return balance;
 }
 
-int Account::getId() { return accId; }
+int Account::getId() const { return accId; }
 
 std::vector<Transaction*> Account::getTransactions() {
     return transactions;
@@ -78,4 +78,9 @@ Account Account::operator-(const Account& other) {
 
 bool operator>(const Account& a1, const Account& a2)  {
     return a1.getBalance() > a2.getBalance();
+}
+
+std::ostream& operator<<(std::ostream& os, const Account& acc) {
+    os << "Account id: " << acc.getId() << " balance: " << acc.getBalance() << std::endl;
+    return os;
 }

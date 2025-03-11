@@ -12,8 +12,8 @@ private:
     double balance = 0;
     std::vector<Transaction*> transactions;
 protected:
-    void deposit(double amnt);
-    void withdraw(double amnt);
+    virtual void deposit(double amnt);
+    virtual void withdraw(double amnt);
     friend class Bank;
 public:
     Account(); 
@@ -22,7 +22,7 @@ public:
     Account operator=(const Account& other); // assignment constructor
     ~Account(); //destructor
 
-    int getId();
+    int getId() const;
     double getBalance() const;
     std::vector<Transaction*> getTransactions();
 
@@ -33,6 +33,7 @@ public:
     friend Account operator+(const double amnt, const Account& acc);
     friend bool operator>(const Account& a1, const Account& a2);
     
+    friend std::ostream& operator<<(std::ostream& os, const Account& acc);
 };
 
 #endif
