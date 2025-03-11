@@ -7,6 +7,7 @@
 #include "Bank/Bank.h"
 #include "Customers/Customer.h"
 #include "Accounts/Account.h"
+#include "Accounts/SavingsAccount.h"
 #include "Transactions/Transaction.h"
 #include "Bank/TransactionException.h"
 #include "Utilities/utilities.cpp"
@@ -19,8 +20,13 @@
 bool test(); // forward declaration
 bool testOverload();
 bool testOperatorOverload();
+bool testInheritance();
 
 int main() {
+    if(!testInheritance()) {
+        std::cerr << "Test failed, exiting.\n";
+        return 0;
+    }
     if(!testOperatorOverload()) {
         std::cerr << "Test failed, exiting.\n";
         return 0;
@@ -255,5 +261,61 @@ bool testOperatorOverload() {
     assert(acc1 > acc3 && "Account 1 should be greater than Account 3!");
 
     std::cout << "[SUCCESS] All Operator Overload Tests Passed!\n";
+    return true;
+}
+
+bool testInheritance() {
+    std::cout << "[TEST] Running Inheritance Tests...\n";
+
+    Bank inheritanceBank;
+
+
+    Customer c1 = Customer("Blake Lively");
+    Customer c2 = Customer("Johnny Dep");
+    Customer c3 = Customer("Frank Lampard");
+
+    Account acc1(500000);
+    SavingsAccount savingAcc1(500, globalInterestRate);
+    SavingsAccount savingAcc2(10000, FED_INTEREST_RATE);
+
+
+    c1.openAccount(acc1);
+    c2.openAccount(savingAcc1);
+    c3.openAccount(savingAcc2);
+
+    inheritanceBank.addCustomer(c1);
+    inheritanceBank.addAccount(acc1);
+    inheritanceBank.addCustomer(c2);
+    inheritanceBank.addAccount(savingAcc1);
+    inheritanceBank.addCustomer(c3);
+    inheritanceBank.addAccount(savingAcc2);
+
+    std::vector<Transaction> transacts;
+    transacts.push_back(Transaction{100.0, acc1.getId(), savingAcc1.getId()});
+    transacts.push_back(Transaction{8.0, acc1.getId(), savingAcc1.getId()});
+    transacts.push_back(Transaction{6.3, acc1.getId(), savingAcc1.getId()});
+    transacts.push_back(Transaction{54.2, acc1.getId(), savingAcc1.getId()});
+    transacts.push_back(Transaction{100.0, acc1.getId(), savingAcc2.getId()});
+    transacts.push_back(Transaction{8.0, acc1.getId(), savingAcc2.getId()});
+    transacts.push_back(Transaction{6.3, acc1.getId(), savingAcc2.getId()});
+    transacts.push_back(Transaction{54.2, acc1.getId(), savingAcc2.getId()});
+
+    for(Transaction t : transacts) {
+        inheritanceBank.executeTransaction(t);
+    }
+    
+    assert(inheritanceBank.getCustomerAccount(c1.getId(),acc1.getId())->getBalance() == 499663 && "Assertion failed: ACC1 balance is off");
+    assert(inheritanceBank.getCustomerAccount(c2.getId(),savingAcc1.getId())->getBalance() == 680.786 && "Assertion failed: SavingsACC1 balance is off");
+    assert(inheritanceBank.getCustomerAccount(c3.getId(),savingAcc2.getId())->getBalance() <= 10608.6);
+
+    std::vector<Account*> accs(3);
+    accs[0] = &acc1;
+    accs[1] = &savingAcc1;
+    accs[2] = &savingAcc2;
+    for(const Account* ac : accs) {
+        std::cout << *ac;
+    }
+    
+    std::cout << "[SUCCESS] All Inheritance Tests Passed!\n";
     return true;
 }
