@@ -80,6 +80,10 @@ bool operator>(const Account& a1, const Account& a2)  {
     return a1.getBalance() > a2.getBalance();
 }
 
+void Account::printThis() {
+    std::cout << "Print account\n";
+}
+
 std::ostream& operator<<(std::ostream& os, const Account& acc) {
     os << "Account id: " << acc.getId() << " balance: " << acc.getBalance() << std::endl;
     return os;
