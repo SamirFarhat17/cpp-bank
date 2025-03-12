@@ -31,7 +31,7 @@ public:
     SavingsAccount(double deposit, double fed_rate = 0) : Account(deposit), interest_rate(fed_rate) {
         std::cout << "-Constructed Savings Account-";
     }
-    virtual void printThis() {
+    void printThis() override {
         std::cout << "Print Savings account\n";
     }
 };
