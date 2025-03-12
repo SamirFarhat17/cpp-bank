@@ -29,6 +29,13 @@ public:
     Account operator+(const Account& other);
     Account operator-(const Account& other);
 
+    template<typename T>
+    bool operator>(const T val) {
+        return balance > val;
+    }
+
+    virtual void printThis();
+
     friend Account operator+(const Account& acc, const double amnt);
     friend Account operator+(const double amnt, const Account& acc);
     friend bool operator>(const Account& a1, const Account& a2);

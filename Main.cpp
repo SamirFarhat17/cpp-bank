@@ -313,9 +313,16 @@ bool testInheritance() {
     accs[1] = &savingAcc1;
     accs[2] = &savingAcc2;
     for(const Account* ac : accs) {
-        std::cout << *ac;
+        std::cout << *ac; 
     }
     
+    // Compile time polymorphism
+    assert(inheritanceBank.getCustomerAccount(c2.getId(),savingAcc1.getId())->getBalance() > 34.12);
+    // Runtime polymorphism(virtual function and dynamic dispatch)
+    accs[0]->printThis();
+    accs[1]->printThis();
+
+
     std::cout << "[SUCCESS] All Inheritance Tests Passed!\n";
     return true;
 }

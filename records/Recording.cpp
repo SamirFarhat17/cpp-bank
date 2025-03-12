@@ -18,5 +18,4 @@ namespace Recording {
             void calculateRead(T bankObj);
     };
 
-
 };

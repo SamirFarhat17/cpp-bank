@@ -12,13 +12,13 @@ private:
         if(events % 3 == 0) deposit(getBalance() * (interest_rate/10000));
     }
 protected:
-    void deposit(double amnt) {
+    virtual void deposit(double amnt) {
         Account::deposit(amnt);
         std::cout << "\nCalled inherited deposit\n";
         events++;
         accrueInterest();
     }
-    void withdraw(double amnt) {
+    virtual void withdraw(double amnt) {
         Account::withdraw(amnt);
         std::cout << "\nCalled inherited withdraw\n";
         events++;
@@ -31,7 +31,9 @@ public:
     SavingsAccount(double deposit, double fed_rate = 0) : Account(deposit), interest_rate(fed_rate) {
         std::cout << "-Constructed Savings Account-";
     }
-
+    virtual void printThis() {
+        std::cout << "Print Savings account\n";
+    }
 };
 
 #endif 
