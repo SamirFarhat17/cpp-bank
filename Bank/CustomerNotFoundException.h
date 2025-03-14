@@ -9,8 +9,8 @@ private:
     std::string msg = "customer not found";
 
 public:
-    explicit CustomerNotFoundException() {}
-    explicit CustomerNotFoundException(std::string m) : msg(m) {}
+    CustomerNotFoundException() {}
+    CustomerNotFoundException(std::string m) : msg(m) {}
 
     virtual const char* what() const noexcept override {
         return msg.c_str();
