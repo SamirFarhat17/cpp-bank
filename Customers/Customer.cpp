@@ -46,7 +46,7 @@ Customer::~Customer() {
 std::string Customer::getName() { 
     return name; 
 }
-int Customer::getId() { 
+int Customer::getId() const { 
     return _id; 
 }
 

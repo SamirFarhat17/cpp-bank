@@ -26,7 +26,7 @@ public:
     std::string getName();
     void openAccount(double deposit);
     void openAccount(Account acc);
-    int getId();
+    int getId() const;
     std::vector<Account*> getAccounts();
 
     friend std::ostream& operator<<(std::ostream& os, const Customer& c);
