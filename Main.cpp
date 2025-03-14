@@ -5,12 +5,14 @@
 #include <ctime>
 #include <cassert>
 #include "Bank/Bank.h"
+#include "Bank/CustomerNotFoundException.h"
+#include "Bank/TransactionException.h"
 #include "Customers/Customer.h"
 #include "Accounts/Account.h"
 #include "Accounts/SavingsAccount.h"
 #include "Transactions/Transaction.h"
-#include "Bank/TransactionException.h"
 #include "Utilities/utilities.cpp"
+
 
 #define NUM_CUSTOMERS 500  // Change this value to scale
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
@@ -171,6 +173,15 @@ bool test() {
     assert(!exceptionCaught && "Overdraft transaction should have thrown an exception!");
     std::cout << "[SUCCESS] Overdraft protection test passed.\n";
 
+    // New test
+    try {
+        testBank.getCustomerAccount(999, 999); // Non-existent customer and account
+    } catch (const CustomerNotFoundException& e) {
+        exceptionCaught = true;
+        std::cout << "Caught expected CustomerNotFoundException: " << e.what() << std::endl;
+    }
+    assert(exceptionCaught && "Invalid customer/account get should have thrown an exception!");
+    
     // Clean up allocated memory
     delete testCustomer;
     delete receiver;

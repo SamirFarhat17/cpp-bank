@@ -1,9 +1,10 @@
 #include "Bank.h"
 #include "TransactionException.h"
+#include "CustomerNotFoundException.h"
 #include "../Customers/Customer.h"  // Include full definition of Customer
 #include "../Accounts/Account.h"    // Include full definition of Account
 #include "../Transactions/Transaction.h"  // Include full definition of Transaction
-
+#include <algorithm>
 
 double globalInterestRate = 200.0000;
 
@@ -27,6 +28,15 @@ void Bank::addAccount(Account& account) {
 }
 
 Account* Bank::getCustomerAccount(int customerId, int accountId) { // TODO inbclude exception logic and customer verification
+
+    
+    auto it = std::find_if(customers.begin(), customers.end(), 
+        [customerId] (const Customer* c) { 
+            return c->getId() == customerId; 
+        });
+    if(it == customers.end()) throw CustomerNotFoundException();   
+    else if(mappings.find(accountId) == mappings.end() || !mappings.count(accountId)) throw CustomerNotFoundException("Account not found");
+    // this time the exception propagates up(expected)
     return mappings[accountId];
 }
 
