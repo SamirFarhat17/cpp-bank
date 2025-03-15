@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <unordered_map>
-#include <iostream>
-#include "TransactionException.h"
+#include "../records/Recording.h"
 
 #define FED_INTEREST_RATE 435.000
 

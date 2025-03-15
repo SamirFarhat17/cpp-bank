@@ -8,14 +8,18 @@
 
 double globalInterestRate = 200.0000;
 
-Bank::Bank() {}
+Bank::Bank() {
+    Recording::initialize();
+}
 Bank::~Bank() {
+    Recording::close();
     std::cout << "Deleting each customer in customers from Bank.cpp\n";
     //for(Customer* c : customers) delete c; 
     customers.clear();
     std::cout << "Deleting each Account in mappings from Bank.cpp\n";
     //for(auto it = mappings.begin(); it != mappings.end(); ++it) delete it->second;
     mappings.clear();
+
 }
 
 void Bank::addCustomer(Customer& c) {
