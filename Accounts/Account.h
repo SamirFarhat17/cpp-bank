@@ -35,6 +35,7 @@ public:
     }
 
     virtual void printThis();
+    std::string print() const;
 
     friend Account operator+(const Account& acc, const double amnt);
     friend Account operator+(const double amnt, const Account& acc);

@@ -85,6 +85,10 @@ void Account::printThis() {
     std::cout << "Print account\n";
 }
 
+std::string Account::print() const {
+    return "ACCOUNT ID: " + std::to_string(accId) + " BALANCE: " + std::to_string(balance) + " Transactions " + std::to_string(transactions.size());
+}
+
 std::ostream& operator<<(std::ostream& os, const Account& acc) {
     os << "Account id: " << acc.getId() << " balance: " << acc.getBalance() << std::endl;
     return os;

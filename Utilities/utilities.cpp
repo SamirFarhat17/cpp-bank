@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../Customers/Customer.h"
 #include "../Accounts/Account.h"
 #include "../Transactions/Transaction.h"
@@ -32,4 +34,21 @@ double add(Account a, Transaction t) {
 template<typename T, typename U, typename V>
 double add(T t, U u, V v) {
     return add(t,u) + add(u, v);
+}
+
+bool locateAccLine(std::string line, std::string id) {
+    if(line.empty() || line[0] != 'A') return false;
+    int idx = 0;
+    std::string matcher;
+    while(matcher != "ACCOUNT ID: ") {
+        matcher += line[idx];
+        idx++;
+    }
+    matcher.clear();
+    while(line[idx] != ' ') {
+        matcher += line[idx];
+        idx++;
+    }
+    return matcher == id;
+
 }
