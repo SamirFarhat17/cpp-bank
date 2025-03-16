@@ -4,6 +4,11 @@
 #include <cstdlib>
 #include <ctime>
 #include <cassert>
+#include <thread>
+#include <mutex>
+#include <semaphore>
+
+
 #include "Bank/Bank.h"
 #include "Bank/CustomerNotFoundException.h"
 #include "Bank/TransactionException.h"
@@ -18,6 +23,87 @@
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
 
 //#define NDEBUG
+//#define CONCURRENCY
+
+bool transactionExecutor(Bank& bank, std::unordered_map<int,std::vector<int>>& customerAccIds, std::vector<int>& customerIds) {
+    for (int i = 0; i < NUM_TRANSACTIONS; ++i) {
+        int senderIdx = rand() % NUM_CUSTOMERS;
+        int receiverIdx = rand() % NUM_CUSTOMERS;
+        while (receiverIdx == senderIdx) receiverIdx = rand() % NUM_CUSTOMERS; // Ensure different customers
+
+        int senderId = customerIds[senderIdx];
+        int receiverId = customerIds[receiverIdx];
+
+        if (customerAccIds[senderId].empty() || customerAccIds[receiverId].empty()) continue; // Skip if no accounts
+
+        int senderAccId = customerAccIds[senderId][rand() % customerAccIds[senderId].size()];
+        int receiverAccId = customerAccIds[receiverId][rand() % customerAccIds[receiverId].size()];
+
+        double amount = (rand() % 200000) / 100.0; // Random amount (-500 to 1500), allowing invalid cases
+
+        Transaction txn = {amount, senderAccId, receiverAccId};
+        
+
+        std::cout << "[TRANSACTION] $" << amount << " wire from "  << '[' << senderId << ']' << " (Acc: " << senderAccId 
+                << ") to " << receiverId << " (Acc: " << receiverAccId << ")" << std::endl;
+        bank.executeTransaction(txn);
+    }
+
+    return true;
+}
+
+bool multithreadedBank() {
+
+    std::cout << "INITIALIZING CONCURRENT BANK\n";
+    Bank concurrentBank;
+    std::unordered_map<int, std::vector<int>> customerAccIds;
+    std::vector<int> customerIds;
+
+    // Create customers with random accounts
+    for (int i = 1; i <= NUM_CUSTOMERS; ++i) {
+        Customer* customer = new Customer("Customer " + std::to_string(i));
+        customerAccIds[customer->getId()] = {};
+        customerIds.push_back(customer->getId());
+        int numAccounts = 1 + rand() % 3; // 1 to 3 accounts
+
+        for (int j = 0; j < numAccounts; ++j) {
+            double initialDeposit = 100.0 + rand() % 10000; // Random deposit between 100-1099
+            customer->openAccount(initialDeposit);
+        }
+
+        concurrentBank.addCustomer(*customer);
+        for (Account* account : customer->getAccounts()) {
+            concurrentBank.addAccount(*account);
+            customerAccIds[customer->getId()].push_back(account->getId());
+        }
+    }
+
+
+    srand(time(nullptr));
+    int noThreads = rand() % 15 + 1;
+    //noThreads = 1;
+    std::vector<std::thread> threads(noThreads);
+
+    for(int i = 0; i < noThreads; i++) {
+        threads[i] = std::thread(transactionExecutor, std::ref(concurrentBank), std::ref(customerAccIds), std::ref(customerIds));
+    }
+
+    std::cout << "THREAD CREATION DONE, TIMING EXECUTION\n";
+    /// TIMING
+    using Clock = std::chrono::high_resolution_clock;
+    auto initialTime = Clock::now();
+
+
+    for(auto& t : threads) t.join();
+
+    auto endTime = Clock::now();
+    auto duration = std::chrono::duration<double>(endTime - initialTime);
+    std::cout << "[FINISHED] Multi-threaded simulation lasted " << duration.count() << "ms\n";
+
+
+    return true;
+}
+
 
 bool test(); // forward declaration
 bool testOverload();
@@ -25,6 +111,10 @@ bool testOperatorOverload();
 bool testInheritance();
 
 int main() {
+#ifdef CONCURRENCY
+    multithreadedBank();
+    return 0;
+#endif
     if(!testInheritance()) {
         std::cerr << "Test failed, exiting.\n";
         return 0;

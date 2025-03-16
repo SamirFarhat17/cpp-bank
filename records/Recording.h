@@ -21,15 +21,27 @@ namespace Recording {
 
     inline void initialize() {
         bankCycle++;
-        accs.open("records/Accounts/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
-        custs.open("records/Customers/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
-        trans.open("records/Transactions/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+        try {
+            accs.open("records/Accounts/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+            custs.open("records/Customers/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+            trans.open("records/Transactions/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+        }
+        catch(std::exception& e) {
+            std::cerr << "Error: File opening went south!" << '\n';
+            exit(EXIT_FAILURE);
+        }
+        
     }
 
     inline void close() {
+    try {
         accs.close();
         custs.close();
         trans.close();
+    }
+    catch (std::exception& e) {
+        std::cerr << "[FILE CLOSE ERROR]" << e.what();
+    }
     }
 
     inline void writeAccs(const Account& acc) {
