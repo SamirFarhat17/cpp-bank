@@ -117,7 +117,6 @@ bool test() {
     std::cerr << "NDEBUG is enabled";
     std::abort();
 #endif
-    Recording::initialize();
     std::cout << "[TEST] Running Bank Application Unit Tests...\n";
 
     // Initialize test bank and customers
@@ -188,7 +187,7 @@ bool test() {
     delete receiver;
 
     std::cout << "[TEST] All tests passed successfully!\n";
-    Recording::close();
+    
     return true;
 }
 

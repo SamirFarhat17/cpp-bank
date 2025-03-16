@@ -19,14 +19,14 @@ namespace Recording {
     static std::fstream trans;
     
 
-    inline static void initialize() {
+    inline void initialize() {
         bankCycle++;
-        accs.open("Accounts/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out);
-        cust.open("Accounts/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out);
-        trans.open("Customers/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out);
+        accs.open("records/Accounts/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+        cust.open("records/Customers/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+        trans.open("records/Transactions/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
     }
 
-    inline static void close() {
+    inline void close() {
         accs.close();
         cust.close();
         trans.close();

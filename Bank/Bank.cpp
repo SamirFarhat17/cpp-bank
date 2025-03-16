@@ -30,7 +30,7 @@ void Bank::addCustomer(Customer& c) {
 
 void Bank::addAccount(Account& account) {
     mappings[account.getId()] = &account;  // Use the actual account reference
-    Recording::accs.close();
+    Recording::writeAccs(account);
 }
 
 Account* Bank::getCustomerAccount(int customerId, int accountId) {
