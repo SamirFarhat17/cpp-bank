@@ -4,9 +4,9 @@
 #include <string>
 
 struct Transaction {
-    double amount;
-    int source;
-    int destination;
+    const double amount;
+    const int source;
+    const int destination;
 };
 
 #endif

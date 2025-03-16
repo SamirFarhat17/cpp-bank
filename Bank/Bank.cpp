@@ -25,6 +25,7 @@ Bank::~Bank() {
 
 void Bank::addCustomer(Customer& c) {
     customers.push_back(&c);
+    Recording::writeCust(c);
 }
 
 
@@ -59,6 +60,9 @@ void Bank::executeTransaction(Transaction transact) {
         // Perform the transaction
         sourceIt->second->withdraw(transact.amount);
         destIt->second->deposit(transact.amount);
+        Recording::writeTrans(transact);
+        Recording::writeAccs(*sourceIt->second);
+        Recording::writeAccs(*destIt->second);
     } 
     catch (TransactionException& e) {
         std::cerr << e.what() << "^^^^^" << '\n';

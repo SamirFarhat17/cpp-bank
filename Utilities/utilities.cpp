@@ -4,6 +4,14 @@
 #include "../Accounts/Account.h"
 #include "../Transactions/Transaction.h"
 
+inline std::string operator+(const std::string s, const int i) {
+    return s + std::to_string(i);
+}
+
+inline std::string operator+(const int i, const std::string s) {
+    return std::to_string(i) + s;
+}
+
 // Overloading
 inline double add(Customer& x, Customer& y) {
     double c1 = 0, c2 = 0;
@@ -41,6 +49,24 @@ inline bool locateAccLine(std::string line, std::string id) {
     int idx = 0;
     std::string matcher;
     while(matcher != "ACCOUNT ID: ") {
+        matcher += line[idx];
+        idx++;
+    }
+    matcher.clear();
+    while(line[idx] != ' ') {
+        matcher += line[idx];
+        idx++;
+    }
+    return matcher == id;
+
+}
+
+inline bool locateCustLine(std::string line, std::string id) {
+    if(line.empty() || line[0] != 'A') return false;
+
+    int idx = 0;
+    std::string matcher;
+    while(matcher != "CUSTOMER ID: ") {
         matcher += line[idx];
         idx++;
     }
