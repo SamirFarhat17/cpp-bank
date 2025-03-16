@@ -22,4 +22,4 @@ Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction
 
 
 clean:
-	del /Q $(EXEC) *.o *.exe
+	del /Q $(EXEC) *.o *.exe records.txt*

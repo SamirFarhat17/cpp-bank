@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "../Transactions/Transaction.h"
-#include "../Bank/Bank.h"
+
  
 class Account {
 private:
@@ -20,14 +20,14 @@ public:
     Account(double deposit);
     Account(const Account& other); // copy constructor
     Account operator=(const Account& other); // assignment constructor
-    ~Account(); //destructor
+    virtual ~Account(); //destructor
 
     int getId() const;
     double getBalance() const;
     std::vector<Transaction*> getTransactions();
 
-    Account operator+(const Account& other);
-    Account operator-(const Account& other);
+    Account operator+(const Account& other) const;
+    Account operator-(const Account& other) const;
 
     template<typename T>
     bool operator>(const T val) {

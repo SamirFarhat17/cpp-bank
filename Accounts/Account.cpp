@@ -61,7 +61,7 @@ void Account::deposit(double amnt) {
 }
 
 
-Account Account::operator+(const Account& other) {
+Account Account::operator+(const Account& other) const {
     return Account(balance + other.balance);
 }
 
@@ -73,7 +73,7 @@ Account operator+(const double amnt, const Account& acc) {
     return Account(acc.balance + amnt);
 }
 
-Account Account::operator-(const Account& other) {
+Account Account::operator-(const Account& other) const {
     return Account(std::min((double)0, balance - other.balance));
 }
 
