@@ -23,3 +23,6 @@ Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction
 
 clean:
 	del /Q $(EXEC) *.o *.exe
+	del /Q records\Accounts\records.txt*
+	del /Q records\Customers\records.txt*
+	del /Q records\Transactions\records.txt*

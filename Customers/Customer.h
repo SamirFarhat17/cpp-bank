@@ -28,6 +28,7 @@ public:
     void openAccount(Account acc);
     int getId() const;
     std::vector<Account*> getAccounts();
+    std::string print() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Customer& c);
 };

@@ -1,5 +1,6 @@
 #include "Account.h"
 #include <algorithm>
+#include <iostream>
 
 int Account::_next_id = 1000;
 
@@ -60,7 +61,7 @@ void Account::deposit(double amnt) {
 }
 
 
-Account Account::operator+(const Account& other) {
+Account Account::operator+(const Account& other) const {
     return Account(balance + other.balance);
 }
 
@@ -72,7 +73,7 @@ Account operator+(const double amnt, const Account& acc) {
     return Account(acc.balance + amnt);
 }
 
-Account Account::operator-(const Account& other) {
+Account Account::operator-(const Account& other) const {
     return Account(std::min((double)0, balance - other.balance));
 }
 
@@ -82,6 +83,10 @@ bool operator>(const Account& a1, const Account& a2)  {
 
 void Account::printThis() {
     std::cout << "Print account\n";
+}
+
+std::string Account::print() const {
+    return "ACCOUNT ID: " + std::to_string(accId) + " BALANCE: " + std::to_string(balance) + " Transactions " + std::to_string(transactions.size());
 }
 
 std::ostream& operator<<(std::ostream& os, const Account& acc) {

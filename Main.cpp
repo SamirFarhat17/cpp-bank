@@ -86,7 +86,7 @@ int main() {
         int senderAccIdx = rand() % sender->getAccounts().size();
         int receiverAccIdx = rand() % receiver->getAccounts().size();
 
-        double amount = (rand() % 2000) - 500; // Random amount (-500 to 1500), allowing invalid cases
+        double amount = (rand() % 200000) / 100.0; // Random amount (-500 to 1500), allowing invalid cases
 
         Transaction txn = {amount, sender->getAccounts()[senderAccIdx]->getId(), receiver->getAccounts()[receiverAccIdx]->getId()};
         std::cout << "[TRANSACTION] $" << amount << " wire from " 
@@ -187,6 +187,7 @@ bool test() {
     delete receiver;
 
     std::cout << "[TEST] All tests passed successfully!\n";
+    
     return true;
 }
 
