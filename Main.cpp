@@ -23,7 +23,7 @@
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
 
 //#define NDEBUG
-#define CONCURRENCY
+//#define CONCURRENCY
 
 bool transactionExecutor(Bank& bank, std::unordered_map<int,std::vector<int>>& customerAccIds, std::vector<int>& customerIds) {
     thread_local std::random_device rd;
@@ -343,6 +343,7 @@ bool testOperatorOverload() {
     Account acc2(500.0);   // Account with a balance of 500
     Account acc3(300.0);   // Account with a balance of 300
 
+    assert(max(acc2,acc3).getBalance() == acc2.getBalance() && "Template max function failed with acc2 > acc3");
     // Test Account + Account
     Account result1 = acc1 + acc2;
     assert(result1.getBalance() == (acc1.getBalance() + acc2.getBalance()) && "Account + Account overload failed!");

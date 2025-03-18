@@ -28,6 +28,7 @@ public:
 
     Account operator+(const Account& other) const;
     Account operator-(const Account& other) const;
+    bool operator>(const Account& other) const;
 
     template<typename T>
     bool operator>(const T val) {

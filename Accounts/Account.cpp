@@ -36,6 +36,10 @@ Account Account::operator=(const Account& other) {
     return *this;
 }
 
+bool Account::operator>(const Account& other) const {
+    return balance > other.balance;
+}
+
 Account::~Account() {
     std::cout<<"Account destructor ";
     for(Transaction* transact : transactions) delete transact;

@@ -21,6 +21,7 @@ inline double add(Customer& x, Customer& y) {
     return c1 + c2;
 }
 
+
 inline double add(Account a1, Account a2) {
     return a1.getBalance() + a2.getBalance();
 }
@@ -42,6 +43,11 @@ inline double add(Account a, Transaction t) {
 template<typename T, typename U, typename V>
 inline double add(T t, U u, V v) {
     return add(t,u) + add(u, v);
+}
+
+template<typename T>
+T max(T a, T b) {
+    return (a > b) ? a : b;
 }
 
 inline bool locateAccLine(std::string line, std::string id) {
