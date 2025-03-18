@@ -111,7 +111,7 @@ By applying these C++ concepts, our banking app is modular, efficient, and secur
 
 ### **Building and running the Project**
 To build the project locally:(EXAMPLE)
-make NUM_TRANSACTIONS=10 NUM_CUSTOMERS=10  NDEBUG=0 CONCURRENCY=0
+make NUM_TRANSACTIONS=5000 NUM_CUSTOMERS=500 TEST_MODE=0  NDEBUG=0 CONCURRENCY=0
 ./BankSimulation
 
 ## Installation & Compilation
