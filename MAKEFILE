@@ -8,6 +8,7 @@ NUM_TRANSACTIONS ?= 10000
 FED_INTEREST_RATE ?= 435.000
 NDEBUG ?= 0
 CONCURRENCY ?= 0
+TEST_MODE ?= 0
 
 # Add configuration variables to CFLAGS
 CFLAGS += -DNUM_CUSTOMERS=$(NUM_CUSTOMERS)
@@ -21,6 +22,10 @@ endif
 
 ifeq ($(CONCURRENCY), 1)
     CFLAGS += -DCONCURRENCY
+endif
+
+ifeq ($(TEST_MODE), 1)
+	CFLAGS += -DTEST_MODE
 endif
 
 # Executable and object files
