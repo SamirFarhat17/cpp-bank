@@ -1,13 +1,18 @@
 #include <algorithm>
+#include <mutex>
+#include <semaphore>
 #include "Bank.h"
 #include "TransactionException.h"
 #include "CustomerNotFoundException.h"
 #include "../Customers/Customer.h"  // Include full definition of Customer
 #include "../Accounts/Account.h"    // Include full definition of Account
 #include "../Transactions/Transaction.h"  // Include full definition of Transaction
-
+#include "../Utilities/Semaphore.cpp"
 
 double globalInterestRate = 200.0000;
+std::mutex mtx;
+std::mutex log_mtx;
+Semaphore semaphore(1);
 
 Bank::Bank() {
     Recording::initialize();
@@ -24,6 +29,7 @@ Bank::~Bank() {
 }
 
 void Bank::addCustomer(Customer& c) {
+    std::lock_guard<std::mutex> lock(mtx); // Protects multithreaded customer creation preventing dupes, lock destroyed on function exit(out of scope)
     customers.push_back(&c);
     Recording::writeCust(c);
 }
@@ -47,6 +53,7 @@ Account* Bank::getCustomerAccount(int customerId, int accountId) {
 }
 
 void Bank::executeTransaction(Transaction transact) {
+    SemaphoreGuard semaphore_guard(semaphore); // SO that it releases when out of scope no matter if exception is thrown
     try {
         if (transact.amount <= 0)  throw TransactionException("Invalid amount submitted");
 
@@ -65,6 +72,14 @@ void Bank::executeTransaction(Transaction transact) {
         Recording::writeAccs(*destIt->second);
     } 
     catch (TransactionException& e) {
-        std::cerr << e.what() << "^^^^^" << '\n';
+        // Use a lock to ensure error messages are printed atomically
+        std::lock_guard<std::mutex> lock(log_mtx);
+
+        std::cerr << "[ERROR] Transaction failed: " << e.what() 
+                  << " | Amount: $" << transact.amount 
+                  << " | Source: " << transact.source 
+                  << " | Destination: " << transact.destination
+                  << '\n';
     }
-}
+    
+};

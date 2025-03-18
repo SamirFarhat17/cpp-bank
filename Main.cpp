@@ -23,13 +23,18 @@
 #define NUM_TRANSACTIONS 10000 // Increase for more transactions
 
 //#define NDEBUG
-//#define CONCURRENCY
+#define CONCURRENCY
 
 bool transactionExecutor(Bank& bank, std::unordered_map<int,std::vector<int>>& customerAccIds, std::vector<int>& customerIds) {
+    thread_local std::random_device rd;
+    thread_local std::mt19937 rng(rd());
+    thread_local std::uniform_real_distribution<double> amountDist(-500.0,2000);
+    thread_local std::uniform_int_distribution<int> customerDist(0, NUM_CUSTOMERS-1);
+
     for (int i = 0; i < NUM_TRANSACTIONS; ++i) {
-        int senderIdx = rand() % NUM_CUSTOMERS;
-        int receiverIdx = rand() % NUM_CUSTOMERS;
-        while (receiverIdx == senderIdx) receiverIdx = rand() % NUM_CUSTOMERS; // Ensure different customers
+        int senderIdx = customerDist(rng);
+        int receiverIdx = customerDist(rng);
+        while (receiverIdx == senderIdx) receiverIdx = customerDist(rng); // Ensure different customers
 
         int senderId = customerIds[senderIdx];
         int receiverId = customerIds[receiverIdx];
@@ -39,13 +44,14 @@ bool transactionExecutor(Bank& bank, std::unordered_map<int,std::vector<int>>& c
         int senderAccId = customerAccIds[senderId][rand() % customerAccIds[senderId].size()];
         int receiverAccId = customerAccIds[receiverId][rand() % customerAccIds[receiverId].size()];
 
-        double amount = (rand() % 200000) / 100.0; // Random amount (-500 to 1500), allowing invalid cases
+        double amount = amountDist(rng); // Random amount (-500 to 1500), allowing invalid cases
 
         Transaction txn = {amount, senderAccId, receiverAccId};
-        
-
-        std::cout << "[TRANSACTION] $" << amount << " wire from "  << '[' << senderId << ']' << " (Acc: " << senderAccId 
-                << ") to " << receiverId << " (Acc: " << receiverAccId << ")" << std::endl;
+        {
+            std::lock_guard<std::mutex> lock(log_mtx);
+            std::cout << "[TRANSACTION] $" << amount << " wire from "  << '[' << senderId << ']' << " (Acc: " << senderAccId 
+                << ") to " << receiverId << " (Acc: " << receiverAccId << ")\n";
+        }
         bank.executeTransaction(txn);
     }
 
@@ -67,7 +73,7 @@ bool multithreadedBank() {
         int numAccounts = 1 + rand() % 3; // 1 to 3 accounts
 
         for (int j = 0; j < numAccounts; ++j) {
-            double initialDeposit = 100.0 + rand() % 10000; // Random deposit between 100-1099
+            double initialDeposit = 100.0 + rand() % 100000; // Random deposit between 100-1099
             customer->openAccount(initialDeposit);
         }
 

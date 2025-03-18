@@ -2,12 +2,12 @@
 #define ACCOUNT_H
 
 #include <vector>
+#include <atomic>
 #include "../Transactions/Transaction.h"
-
  
 class Account {
 private:
-    static int _next_id;
+    static std::atomic<int> _next_id;
     int accId;
     double balance = 0;
     std::vector<Transaction*> transactions;
