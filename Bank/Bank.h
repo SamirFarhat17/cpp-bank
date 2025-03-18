@@ -5,7 +5,10 @@
 #include <unordered_map>
 #include "../records/Recording.h"
 
-#define FED_INTEREST_RATE 435.000
+#ifndef NUM_TRANSACTIONS
+    #define FED_INTEREST_RATE 435.000
+#endif
+
 
 extern double globalInterestRate;
 
