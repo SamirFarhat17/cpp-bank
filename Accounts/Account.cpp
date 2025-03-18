@@ -1,8 +1,9 @@
 #include "Account.h"
 #include <algorithm>
 #include <iostream>
+#include <atomic>
 
-int Account::_next_id = 1000;
+std::atomic<int> Account::_next_id(1000); // Myultithreaded account creation means this shoiuld be atomic to prevent account creation with same id
 
 Account::Account() : accId(++_next_id) { std::cout << "-Constructed Account-"; }
 Account::Account(double deposit) : accId(++_next_id), balance(deposit) { std::cout << "-Constructed Account-"; }

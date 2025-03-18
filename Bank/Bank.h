@@ -13,6 +13,8 @@ class Account;
 class Customer;
 class Transaction;
 
+extern std::mutex log_mtx;
+
 class Bank {
 private:
     std::vector<Customer*> customers;
