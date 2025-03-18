@@ -18,10 +18,13 @@
 #include "Transactions/Transaction.h"
 #include "Utilities/utilities.cpp"
 
+#ifndef NUM_CUSTOMERS
+    #define NUM_CUSTOMERS 500
+#endif
 
-#define NUM_CUSTOMERS 500  // Change this value to scale
-#define NUM_TRANSACTIONS 10000 // Increase for more transactions
-
+#ifndef NUM_TRANSACTIONS
+    #define NUM_TRANSACTIONS 10000
+#endif
 //#define NDEBUG
 //#define CONCURRENCY
 
@@ -117,6 +120,11 @@ bool testOperatorOverload();
 bool testInheritance();
 
 int main() {
+    std::cout << "FED INTEREST RATE=" << FED_INTEREST_RATE << '\n';
+#ifdef NDEBUG
+    std::cerr << "NDEBUG is enabled";
+    std::abort();
+#endif
 #ifdef CONCURRENCY
     multithreadedBank();
     return 0;
@@ -209,10 +217,6 @@ int main() {
 }
 
 bool test() {
-#ifdef NDEBUG
-    std::cerr << "NDEBUG is enabled";
-    std::abort();
-#endif
     std::cout << "[TEST] Running Bank Application Unit Tests...\n";
 
     // Initialize test bank and customers

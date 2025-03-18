@@ -1,13 +1,41 @@
+# Compiler and flags
 CC = g++
 CFLAGS = -Wall -g -std=c++11
+
+# Configuration variables (can be overridden at build time)
+NUM_CUSTOMERS ?= 500
+NUM_TRANSACTIONS ?= 10000
+FED_INTEREST_RATE ?= 435.000
+NDEBUG ?= 0
+CONCURRENCY ?= 0
+
+# Add configuration variables to CFLAGS
+CFLAGS += -DNUM_CUSTOMERS=$(NUM_CUSTOMERS)
+CFLAGS += -DNUM_TRANSACTIONS=$(NUM_TRANSACTIONS)
+CFLAGS += -DFED_INTEREST_RATE=$(FED_INTEREST_RATE)
+
+# Conditionally define NDEBUG and CONCURRENCY
+ifeq ($(NDEBUG), 1)
+    CFLAGS += -DNDEBUG
+endif
+
+ifeq ($(CONCURRENCY), 1)
+    CFLAGS += -DCONCURRENCY
+endif
+
+# Executable and object files
 EXEC = BankService.exe
 OBJS = Main.o Bank.o Account.o Customer.o
+RECORDS = records\Accounts\records.txt* records\Customers\records.txt* records\Transactions\records.txt*
+
+# Default target
+all: $(EXEC)
+
+# Link the executable
 $(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
-BankService: Main.o Bank.o Account.o Customer.o 
-	$(CC) $(CFLAGS) -o main Main.o Bank.o Account.o Customer.o 
-
+# Object file rules
 Main.o: Main.cpp
 	$(CC) $(CFLAGS) -c Main.cpp
 
@@ -20,9 +48,12 @@ Account.o: Accounts/Account.cpp Accounts/Account.h Transactions/Transaction.h
 Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction.h
 	$(CC) $(CFLAGS) -c Customers/Customer.cpp
 
-
+# Clean up build artifacts
 clean:
-	del /Q $(EXEC) *.o *.exe
-	del /Q records\Accounts\records.txt*
-	del /Q records\Customers\records.txt*
-	del /Q records\Transactions\records.txt*
+	@echo "Cleaning build artifacts..."
+	@if exist $(EXEC) del /Q $(EXEC) $(OBJS) $(RECORDS)
+	@if exist $(EXEC) rm -f $(EXEC) $(OBJS) $(RECORDS)  
+	@echo "Clean complete."
+
+# Phony targets
+.PHONY: all clean
