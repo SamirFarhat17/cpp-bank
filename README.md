@@ -104,7 +104,7 @@ By applying these C++ concepts, our banking app is modular, efficient, and secur
 ## Installation & Compilation
 
 ### **Requirements**
-- C++11 or newer
+- C++14 or newer
 - g++ or MSVC compiler
 - Docker (for containerization)
 - Kubernetes (for orchestration)
