@@ -7,32 +7,57 @@ string rtrim(const string &);
 vector<string> split(const string &);
 
 /*
- * Complete the 'chiefHopper' function below.
+ * Complete the 'lilysHomework' function below.
  *
  * The function is expected to return an INTEGER.
  * The function accepts INTEGER_ARRAY arr as parameter.
  */
-bool runSim(int& energy, std::vector<int>& arr) {
-    int minEnergy = energy;
-    for(int i = 0; i < arr.size(); i++) {
-        if(energy <= 0) {
-            energy = minEnergy - energy;
-            return false;
-        }
-        if(energy < arr[i]) energy -= (arr[i] - energy);
-        else energy += (energy - arr[i]);
-    }
-    
-    return true;
-}
 
-int chiefHopper(vector<int> arr) {
-    int energy = 0; // Start with zero and work backward
-    int n = static_cast<int>(arr.size());
-    for (int i = n - 1; i >= 0; i--) {
-        energy = ceil((energy + arr[i]) / 2.0);
+int lilysHomework(vector<int> arr_orig) {
+    int result = INT_MAX;
+
+
+    vector<int> sorted(arr_orig);
+    sort(sorted.begin(), sorted.end(), greater<int>());
+
+    for (int rev = 0; rev < 2; rev++) {
+        int curSwap = 0;
+        if (rev) {
+            reverse(sorted.begin(), sorted.end());
+        }
+        vector<int> arr(arr_orig);
+        // val, pos
+        unordered_map<int, int> val2pos;
+        for (int i = 0; i < arr.size(); i++) {
+            val2pos[arr[i]] = i;
+        }
+
+
+        for (int i = 0; i < arr.size(); i++) {
+            if (arr[i] == sorted[i]) {
+                continue;
+            }
+            int ai = arr[i];
+            int si = sorted[i];
+
+            swap(arr[i], arr[val2pos[si]]);
+            curSwap++;
+
+
+            val2pos[ai] = val2pos[si];
+            val2pos[si] = i;
+
+
+        }
+
+        result = min(result, curSwap);
+
     }
-    return energy;
+
+
+    return result;
+
+
 }
 
 int main()
@@ -57,7 +82,7 @@ int main()
         arr[i] = arr_item;
     }
 
-    int result = chiefHopper(arr);
+    int result = lilysHomework(arr);
 
     fout << result << "\n";
 
