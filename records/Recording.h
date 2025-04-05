@@ -34,14 +34,14 @@ namespace Recording {
     }
 
     inline void close() {
-    try {
-        accs.close();
-        custs.close();
-        trans.close();
-    }
-    catch (std::exception& e) {
-        std::cerr << "[FILE CLOSE ERROR]" << e.what();
-    }
+        try {
+            accs.close();
+            custs.close();
+            trans.close();
+        }
+        catch (std::exception& e) {
+            std::cerr << "[FILE CLOSE ERROR]" << e.what();
+        }
     }
 
     inline void writeAccs(const Account& acc) {
