@@ -5,6 +5,8 @@
 #include <sstream> 
 #include <fstream>
 #include <string>
+#include <thread>
+#include <chrono>
 
 #include "../Accounts/Account.h"
 #include "../Customers/Customer.h"
@@ -38,9 +40,13 @@ namespace Recording {
             accs.close();
             custs.close();
             trans.close();
+            std::ofstream success ("records/FLAG.SUCCESS");
+            success.close();
+            std::this_thread::sleep_for(std::chrono::seconds(100)); // Sleep for 3 seconds
         }
         catch (std::exception& e) {
             std::cerr << "[FILE CLOSE ERROR]" << e.what();
+
         }
     }
 
