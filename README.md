@@ -111,8 +111,55 @@ By applying these C++ concepts, our banking app is modular, efficient, and secur
 
 ### **Building and running the Project**
 To build the project locally:(EXAMPLE)
+```bash
 make NUM_TRANSACTIONS=5000 NUM_CUSTOMERS=500 TEST_MODE=0  NDEBUG=0 CONCURRENCY=0
 ./BankSimulation
+```
+Here's a clear **Building and Running in Docker** section for your README.md, covering both individual service builds and the complete `compose.yaml` setup:
+
+---
+
+## 🐳 Building and Running in Docker
+
+### **1. Bank Service Only**
+Build and run just the C++ bank service:
+
+```bash
+# Build the image
+docker build `
+>>   --build-arg NUM_CUSTOMERS=100 `
+>>   --build-arg NUM_TRANSACTIONS=1000 `
+>>   --build-arg NDEBUG=0 `
+>>   --build-arg TEST_MODE=0 `
+>>   --build-arg CONCURRENCY=0 `
+>>   -t bank-service .
+
+# Run the container (mounts ./records to /app/records)
+docker run -v ${PWD}/records:/app/records bank-servicedocker build `
+>>   --build-arg NUM_CUSTOMERS=100 `
+>>   --build-arg NUM_TRANSACTIONS=1000 `
+>>   --build-arg NDEBUG=0 `
+>>   --build-arg CONCURRENCY=0 `
+>>   --build-arg TEST_MODE=0 `
+>>   -t bank-service .
+```
+
+---
+
+### **2. Full System with Compose**
+For running both the bank service and file monitor together:
+
+#### Commands
+```bash
+# Build and start all services
+docker compose --env-file bank.env build
+
+# Stop and remove containers
+docker compose down
+
+# Rebuild specific service
+docker compose build bank-service
+```
 
 ## Installation & Compilation
 -Implement a GUI using Qt or SFML.
