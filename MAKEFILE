@@ -57,7 +57,7 @@ Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction
 clean:
 	@echo "Cleaning build artifacts..."
 	@if exist $(EXEC) del /Q $(EXEC) $(OBJS) $(RECORDS)
-	@if exist $(EXEC) rm -f $(EXEC) $(OBJS) $(RECORDS)  
+	@if exist $(EXEC) rm -rf $(EXEC) $(OBJS) $(RECORDS)  
 	@echo "Clean complete."
 
 # Phony targets
