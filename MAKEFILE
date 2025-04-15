@@ -31,7 +31,7 @@ endif
 # Executable and object files
 EXEC = BankService.exe
 OBJS = Main.o Bank.o Account.o Customer.o
-RECORDS = records\Accounts\records.txt* records\Customers\records.txt* records\Transactions\records.txt* records\*.SUCCESS 
+RECORDS = records\Accounts\records* records\Customers\records* records\Transactions\records* records\*.SUCCESS records\BANK_READY
 
 # Default target
 all: $(EXEC)
@@ -57,7 +57,7 @@ Customer.o: Customers/Customer.cpp Customers/Customer.h Transactions/Transaction
 clean:
 	@echo "Cleaning build artifacts..."
 	@if exist $(EXEC) del /Q $(EXEC) $(OBJS) $(RECORDS)
-	@if exist $(EXEC) rm -f $(EXEC) $(OBJS) $(RECORDS)  
+	@if exist $(EXEC) rm -rf $(EXEC) $(OBJS) $(RECORDS)  
 	@echo "Clean complete."
 
 # Phony targets
