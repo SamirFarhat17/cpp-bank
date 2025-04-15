@@ -154,7 +154,8 @@ For running both the bank service and file monitor together:
 # Build and start all services
 docker compose --env-file bank.env build
 
-# Stop and remove containers
+# Cleanup and remove containers
+docker-compose run cleanup 
 docker compose down
 
 # Rebuild specific service
