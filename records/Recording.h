@@ -24,9 +24,9 @@ namespace Recording {
     inline void initialize() {
         bankCycle++;
         try {
-            accs.open("records/Accounts/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
-            custs.open("records/Customers/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
-            trans.open("records/Transactions/records.txt" + std::to_string(bankCycle), std::ios::in | std::ios::out | std::ios::trunc);
+            accs.open("records/Accounts/records" + std::to_string(bankCycle) + ".txt", std::ios::in | std::ios::out | std::ios::trunc);
+            custs.open("records/Customers/records" + std::to_string(bankCycle) + ".txt", std::ios::in | std::ios::out | std::ios::trunc);
+            trans.open("records/Transactions/records" + std::to_string(bankCycle) + ".txt", std::ios::in | std::ios::out | std::ios::trunc);
         }
         catch(std::exception& e) {
             std::cerr << "Error: File opening went south!" << '\n';
