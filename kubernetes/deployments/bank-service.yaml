@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-service
+  template:
+    metadata:
+      labels:
+        app: bank-service
+    spec:
+      containers:
+      - name: bank-service
+        image: your-registry/bank-service:latest
+        command: ["/bin/sh", "-c", "./BankService.exe && touch /app/records/BANK_READY"]
+        env:
+        - name: NUM_CUSTOMERS
+          value: "$(NUM_CUSTOMERS)"
+        - name: NUM_TRANSACTIONS
+          value: "$(NUM_TRANSACTIONS)"
+        - name: FED_INTEREST_RATE
+          value: "$(FED_INTEREST_RATE)"
+        - name: NDEBUG
+          value: "$(NDEBUG)"
+        - name: CONCURRENCY
+          value: "$(CONCURRENCY)"
+        - name: TEST_MODE
+          value: "$(TEST_MODE)"
+        volumeMounts:
+        - name: records-volume
+          mountPath: /app/records
+        livenessProbe:
+          exec:
+            command:
+            - test
+            - -f
+            - /app/records/BANK_READY
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 5
+      volumes:
+      - name: records-volume
+        persistentVolumeClaim:
+          claimName: records-pvc

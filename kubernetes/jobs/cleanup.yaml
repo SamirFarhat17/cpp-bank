@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cleanup
+spec:
+  template:
+    spec:
+      containers:
+      - name: cleanup
+        image: alpine
+        command: ["/bin/sh", "-c", "rm -f BankService.exe *.o records/*/*.txt* records/*.SUCCESS records/BANK_READY"]
+        volumeMounts:
+        - name: records-volume
+          mountPath: /app/records
+        - name: app-volume
+          mountPath: /app
+      restartPolicy: Never
+      volumes:
+      - name: records-volume
+        persistentVolumeClaim:
+          claimName: records-pvc
+      - name: app-volume
+        persistentVolumeClaim:
+          claimName: app-pvc
