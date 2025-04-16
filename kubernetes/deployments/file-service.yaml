@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: file-monitor
+  template:
+    metadata:
+      labels:
+        app: file-monitor
+    spec:
+      containers:
+      - name: file-monitor
+        image: your-registry/file-monitor:latest
+        command: ["/bin/sh", "-c", "python file-processor.py"]
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        volumeMounts:
+        - name: records-volume
+          mountPath: /app/records
+      volumes:
+      - name: records-volume
+        persistentVolumeClaim:
+          claimName: records-pvc
